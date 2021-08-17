@@ -125,8 +125,8 @@
                         
                             <div class="blank_box"></div>
                             <span class="meta">
-                                Words <span class="post-count">3</span> and
-                                Reading Time <span class="post-count">1</span> Minutes
+                                Words <span class="post-count">691</span> and
+                                Reading Time <span class="post-count">3</span> Minutes
                             </span>
                             <div class="blank_box"></div>
                             <!-- 不蒜子统计 start -->
@@ -270,7 +270,45 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h1>
+                <h1 id="示例一-商品促销"><a href="#示例一-商品促销" class="headerlink" title="示例一 商品促销"></a>示例一 商品促销</h1><blockquote>
+<p>在过节期间,需要将一批商品打折处理,一部分商品8折出售,一部分商品9折出售,针对不同的客户给予折扣卷,普通用户满100返30,Vip用户满100返50.</p>
+</blockquote>
+<h2 id="普通写法"><a href="#普通写法" class="headerlink" title="普通写法"></a>普通写法</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">discountPrice</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (data.role === <span class="string">'vip'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> data.price &gt; <span class="number">100</span> ? data.price - <span class="number">50</span> : data.price;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (data.role === <span class="string">'common'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> data.price &gt; <span class="number">100</span> ? data.price - <span class="number">30</span> : data.price;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( data.type = <span class="string">'a'</span> ) &#123;</span><br><span class="line">        <span class="keyword">return</span> data.price * <span class="number">100</span> * <span class="number">90</span> / <span class="number">10000</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( data.type = <span class="string">'b'</span> ) &#123;</span><br><span class="line">        <span class="keyword">return</span> data.price * <span class="number">100</span> * <span class="number">80</span> / <span class="number">10000</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>普通写法将所有条件和算法都聚合在一起,以后扩展代码会臃肿不堪。</li>
+<li>在调用当前函数时,由于判断过多,消耗了性能。</li>
+<li>违反了设计模式的开闭原则。</li>
+</ul>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> priceStrategy = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> strategy = &#123;</span><br><span class="line">        return30(price) &#123;</span><br><span class="line">            <span class="keyword">return</span> price - ParseInt(price/<span class="number">100</span>)*<span class="number">30</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        return50(price) &#123;</span><br><span class="line">            <span class="keyword">return</span> price - ParseInt(price/<span class="number">100</span>)*<span class="number">50</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        percent90(price) &#123;</span><br><span class="line">            <span class="keyword">return</span> price * <span class="number">100</span> * <span class="number">90</span> / <span class="number">10000</span>; </span><br><span class="line">        &#125;,</span><br><span class="line">        percent80(price) &#123;</span><br><span class="line">            <span class="keyword">return</span> price * <span class="number">80</span> * <span class="number">100</span> / <span class="number">10000</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">algorithm, price</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> strategy[algorithm] &amp;&amp; strategy[algorithm](price);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line">priceStrategy( <span class="string">'return30'</span>, price );</span><br></pre></td></tr></table></figure>
+<h1 id="示例二-表单验证"><a href="#示例二-表单验证" class="headerlink" title="示例二 表单验证"></a>示例二 表单验证</h1><blockquote>
+<p>对于表单的验证，是否为空，是否为数字，是否为本地电话</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> inputStrategy = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> strategy = &#123;</span><br><span class="line">        notNull(value) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="regexp">/\S+/</span>.test(value) ? <span class="string">'请输入内容'</span> : <span class="string">''</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        number(value) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="regexp">/^[0-9]$/</span>.test(value) ? <span class="string">''</span> : <span class="string">'请输入数字'</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        phone(value) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="regexp">/^\d&#123;3&#125;\-\d&#123;8&#125;$|^\d&#123;4&#125;\-\d&#123;7&#125;$/</span>.test(value) ? <span class="string">''</span> : <span class="string">'请输入座机号码'</span>；</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        check( type, value ) &#123;</span><br><span class="line">            value = value.trim();</span><br><span class="line">            <span class="keyword">return</span> strategy[type] &amp;&amp; strategy[type](value);</span><br><span class="line">        &#125;,</span><br><span class="line">        addStrategy(type, fn) &#123;</span><br><span class="line">            strategy[type] = fn;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="示例三-权限验证"><a href="#示例三-权限验证" class="headerlink" title="示例三  权限验证"></a>示例三  权限验证</h1><blockquote>
+<p>根据用户账户,用户的等级,用户的标识,用户的类别 判断用户是否有权限登录</p>
+</blockquote>
+<p>根据条件设置策略规则<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> RoleStrategy = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> strategy = &#123;</span><br><span class="line">        checkToken(data) &#123;</span><br><span class="line">            <span class="keyword">return</span> data.token === <span class="string">'token'</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        checkLevel(data) &#123;</span><br><span class="line">            <span class="keyword">return</span> data.level &gt; <span class="number">1</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        checkMark(data) &#123;</span><br><span class="line">            <span class="keyword">return</span> data.mark === <span class="string">'mark'</span>;</span><br><span class="line">        &#125;,</span><br><span class="line">        checkType(data) &#123;</span><br><span class="line">            <span class="keyword">return</span> data.type === <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        check( type, value ) &#123;</span><br><span class="line">            <span class="keyword">return</span> strategy[type] &amp;&amp; strategy[type](value);</span><br><span class="line">        &#125;,</span><br><span class="line">        addStrategy(type, fn) &#123;</span><br><span class="line">            strategy[type] = fn;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>设置校验规则</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Validator</span> </span>&#123;</span><br><span class="line">    cache: [],</span><br><span class="line">    add( value, method ) &#123;</span><br><span class="line">        <span class="keyword">this</span>.cache.push(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> RoleStrategy[method](value);</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    check() &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">this</span>.cache.forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> ( !item() ) &#123;</span><br><span class="line">                <span class="keyword">return</span> result = <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>针对数据进行校验</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> validator = <span class="keyword">new</span> Validator();</span><br><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">    token = <span class="string">'token'</span>,</span><br><span class="line">    level = <span class="number">2</span>,</span><br><span class="line">    mark = <span class="string">'mark'</span>,</span><br><span class="line">    type = <span class="string">'0'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> ( i <span class="keyword">in</span> data ) &#123;</span><br><span class="line">    validator.add( <span class="string">`check<span class="subst">$&#123;i&#125;</span>`</span>, data[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> result = validator.check();</span><br><span class="line"></span><br><span class="line"><span class="comment">// to do  something</span></span><br></pre></td></tr></table></figure>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>策略模式主要是负责处理算法逻辑并读理管理。</p>
+<ul>
+<li><p>有点</p>
+<ul>
+<li>各个算法相互独立,互补干扰,可以重复利用,提升了利用率。</li>
+<li>相对于扩展,策略模式方便扩展。</li>
+<li>维护,更便于后期维护。</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>用户必须了解算法,成本较高</li>
+<li>各个算法相互独立,相同部分不能共享</li>
+</ul>
+</li>
+</ul>
+
                 
                 <hr>
                 <!-- Pager -->
@@ -391,7 +429,7 @@
           <strong class="toc-title">Contents</strong>
           
             
-              <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#示例1"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">示例1</span></a></li></ol>
+              <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#示例一-商品促销"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">示例一 商品促销</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#普通写法"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">普通写法</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#策略模式"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">策略模式</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#示例二-表单验证"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">示例二 表单验证</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#示例三-权限验证"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">示例三  权限验证</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#分析"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">分析</span></a></li></ol>
             
           
           </div>
@@ -668,7 +706,7 @@
         
 
         
-            <script type="text/javascript" src="/js/mouse-click.js" content='[&#34;🌱&#34;,&#34;🍀&#34;,&#34;❤️&#34;,&#34;🔥&#34;,&#34;✨&#34;]' color='[&#34;rgb(121,93,179)&#34; ,&#34;rgb(76,180,231)&#34; ,&#34;rgb(184,90,154)&#34;]'></script>
+            <script type="text/javascript" src="/js/mouse-click.js" content='[&quot;🌱&quot;,&quot;🍀&quot;,&quot;❤️&quot;,&quot;🔥&quot;,&quot;✨&quot;]' color='[&quot;rgb(121,93,179)&quot; ,&quot;rgb(76,180,231)&quot; ,&quot;rgb(184,90,154)&quot;]'></script>
         
 
         <!-- background effects end -->
@@ -678,6 +716,21 @@
     
         <script src="/js/ribbonDynamic.js"></script>
     
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -3,6 +3,13 @@
 
 
     <url>
+        <loc>https://dusign.net/tags/%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F/</loc>
+        <lastmod>2021-08-17T08:57:38.817Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>https://dusign.net/tags/%25E6%2580%25A7%25E8%2583%25BD%25E4%25BC%2598%25E5%258C%2596/</loc>
         <lastmod>2021-08-17T06:42:52.462Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -12,13 +19,6 @@
     <url>
         <loc>https://dusign.net/tags/webpack/</loc>
         <lastmod>2021-08-17T06:42:52.462Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://dusign.net/tags/%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F/</loc>
-        <lastmod>2021-08-17T06:42:34.212Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
