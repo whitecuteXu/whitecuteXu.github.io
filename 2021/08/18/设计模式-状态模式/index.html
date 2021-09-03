@@ -125,7 +125,7 @@
                         
                             <div class="blank_box"></div>
                             <span class="meta">
-                                Words <span class="post-count">37</span> and
+                                Words <span class="post-count">309</span> and
                                 Reading Time <span class="post-count">1</span> Minutes
                             </span>
                             <div class="blank_box"></div>
@@ -271,8 +271,17 @@
                 post-container">
 
                 <h1 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h1><blockquote>
-<p>当一个对象的内部状态发生改变时,会导致其行为的改变,这看起来像是改变了对象.</p>
+<p>当对象发生变化时，会根据状态变化来触发一个逻辑。<br>当一个对象的内部状态发生改变时,会导致其行为的改变,这看起来像是改变了对象.</p>
 </blockquote>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><blockquote>
+<p>台灯的状态：开启, 弱光, 强光,关闭</p>
+</blockquote>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> execute &#123;</span><br><span class="line">    _currentState =[];</span><br><span class="line"></span><br><span class="line">    changeState() &#123;</span><br><span class="line">        <span class="keyword">this</span>._currentState = <span class="built_in">Object</span>.keys(<span class="built_in">arguments</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    doAction() &#123;</span><br><span class="line">        <span class="keyword">this</span>._currentState.forEach(<span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</span><br><span class="line">            action[key] &amp;&amp; action[key].apply(<span class="keyword">this</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> action = &#123;</span><br><span class="line">    open() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"开灯"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    lowLight() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"弱光"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    glare() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"强光"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> light = <span class="keyword">new</span> execute();</span><br><span class="line"></span><br><span class="line">light.changeState(<span class="string">'open'</span>, <span class="string">'lowLight'</span>).doAction();</span><br></pre></td></tr></table></figure>
+<h2 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h2><p>状态机的原理,状态机是一组状态的集合,它包含四个要素：状态,条件,动作,次态。<br>当根据条件与当前状态后,做出了动作和改变了状态,这就是状态机的动作流程。</p>
+<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h3><blockquote>
+<p>Promise 的模拟</p>
+</blockquote>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> StateMachine <span class="keyword">from</span> <span class="string">'javascript-state-machine'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> stateMachine = <span class="keyword">new</span> StateMachine(&#123;</span><br><span class="line">    init: <span class="string">"pending"</span>,</span><br><span class="line">    transitions: [</span><br><span class="line">        &#123; name: <span class="string">"resolve"</span>, form: <span class="string">"pending"</span>, to: <span class="string">"fulfilled"</span> &#125;,</span><br><span class="line">        &#123; name: <span class="string">"reject"</span>, <span class="keyword">from</span>: <span class="string">"pending"</span>, to: <span class="string">"rejected"</span> &#125;</span><br><span class="line">    ],</span><br><span class="line">    method: &#123;</span><br><span class="line">        onResolve(state, data) &#123;</span><br><span class="line">            data.successFn.forEach(<span class="function"><span class="params">fn</span> =&gt;</span> fn());</span><br><span class="line">        &#125;,</span><br><span class="line">        onReject( state, data ) &#123;</span><br><span class="line">           data.failFn.forEach(<span class="function"><span class="params">fn</span> =&gt;</span> fn());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> MyPromise &#123;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.successFn = [];</span><br><span class="line">        <span class="keyword">this</span>.failFn = [];</span><br><span class="line">        fn( <span class="function"><span class="params">()</span> =&gt;</span> stateMachine.resolve(<span class="keyword">this</span>), <span class="function"><span class="params">()</span> =&gt;</span> stateMachine.reject(<span class="keyword">this</span>) );</span><br><span class="line">    &#125;</span><br><span class="line">    then(successFn, failFn) &#123;</span><br><span class="line">        <span class="keyword">this</span>.successFn.push(successFn);</span><br><span class="line">        <span class="keyword">this</span>.failFn.push(failFn);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
                 
                 <hr>
@@ -398,7 +407,7 @@
           <strong class="toc-title">Contents</strong>
           
             
-              <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#核心"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">核心</span></a></li></ol>
+              <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#核心"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">核心</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#实例"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">实例</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#状态机"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">状态机</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#实例-1"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">实例</span></a></li></ol></li></ol></li></ol>
             
           
           </div>
@@ -675,7 +684,7 @@
         
 
         
-            <script type="text/javascript" src="/js/mouse-click.js" content='[&quot;🌱&quot;,&quot;🍀&quot;,&quot;❤️&quot;,&quot;🔥&quot;,&quot;✨&quot;]' color='[&quot;rgb(121,93,179)&quot; ,&quot;rgb(76,180,231)&quot; ,&quot;rgb(184,90,154)&quot;]'></script>
+            <script type="text/javascript" src="/js/mouse-click.js" content='[&#34;🌱&#34;,&#34;🍀&#34;,&#34;❤️&#34;,&#34;🔥&#34;,&#34;✨&#34;]' color='[&#34;rgb(121,93,179)&#34; ,&#34;rgb(76,180,231)&#34; ,&#34;rgb(184,90,154)&#34;]'></script>
         
 
         <!-- background effects end -->
@@ -685,21 +694,6 @@
     
         <script src="/js/ribbonDynamic.js"></script>
     
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
